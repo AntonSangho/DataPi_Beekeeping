@@ -3,3 +3,4 @@
 ### 개발환경 
 - python 3.10 
 - thonny 4.1.4  
+- micropython 
