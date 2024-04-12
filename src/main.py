@@ -3,6 +3,8 @@ from machine import Pin, I2C, PWM
 from ds3231_port import DS3231
 import onewire, ds18x20
 from neopixel import NeoPixel
+import uos 
+import sdcard
 
 # 글로벌 변수
 sensing_active = False
@@ -48,6 +50,28 @@ def np_off():
         np0[i] = (0,0,0)
     np0.write()
 
+# sdcard cs 핀 설정
+cs = machine.Pin(17, machine.Pin.OUT)
+
+# sdcard spi 설정
+spi = machine.SPI(0,
+    baudrate = 100000,
+    polarity = 0,
+    phase = 0,
+    firstbit = machine.SPI.MSB,
+    sck = machine.Pin(18),
+    mosi = machine.Pin(19),
+    miso = machine.Pin(16)
+)
+
+# sdcard 초기화
+sd = sdcard.SDCard(spi, cs)
+
+# sdcard 마운트
+vfs = uos.VfsFat(sd)
+uos.mount(vfs, "/sd")
+
+
 # 버튼 핸들러 함수
 def button_handler(pin):
     global sensing_active, recording_active, file, button_pressed_time
@@ -60,7 +84,8 @@ def button_handler(pin):
             recording_active = not recording_active
             if recording_active:
                 play_buzzer(2000)  # recording_active 시작 시 부저
-                file = open('temperature_data.csv', 'a')  # 파일 열기
+                #file = open('temperature_data.csv', 'a')  # 파일 열기
+                file = open("/sd/test01.csv", "w") 
                 # 파일에 새 데이터 세트가 추가될 때마다 구분자 삽입
                 file.write("\n--- New Data ---\n")
                 if file.tell() == len("---New Data ---\n"): #파일이 새로 생성되었다면 
@@ -118,7 +143,8 @@ while True:
                 if write_count >= write_threshold:
                     # 파일을 닫고 다시 열기
                     file.close()
-                    file = open('temperature_data.csv','a')
+                    file = open('test01.csv','a')
+                    #file = open('temperature_data.csv','a')
                     write_count = 0 # 쓰기 카운터를 다시 원상태로
                     print("reopen file")
             utime.sleep(recording_interval)  # 사용자가 설정한 기록 간격에 따라 대기
