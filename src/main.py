@@ -2,6 +2,7 @@ import utime
 from machine import Pin, I2C, PWM
 from ds3231_port import DS3231
 import onewire, ds18x20
+from neopixel import NeoPixel
 
 # 글로벌 변수
 sensing_active = False
@@ -14,25 +15,41 @@ write_count = 0 # 안정적인 파일쓰기를 위한 카운터 초기화
 write_threshold = 50 # 몇 회이상 쓰이면 파일을 다시 열도록 횟수 설정 
 
 # LED, 버튼, 부저 설정
-YLed = Pin(22, Pin.OUT)
-Rled = Pin(28, Pin.OUT)
-Rbutton = Pin(13, Pin.IN, Pin.PULL_UP)
-buzzer = PWM(Pin(15))
+Led = Pin("LED", Pin.OUT)
+button = Pin(20, Pin.IN, Pin.PULL_UP)
+buzzer = PWM(Pin(22))
 
 # I2C 설정
-sdaPIN = Pin(8)
-sclPIN = Pin(9)
+sdaPIN = Pin(4)
+sclPIN = Pin(5)
 i2c = I2C(0, sda=sdaPIN, scl=sclPIN)
 
 # DS3231 RTC 및 DS18x20 온도 센서 설정
 ds3231 = DS3231(i2c)
-data = Pin(1)
+data = Pin(26)
 temp_wire = onewire.OneWire(data)
 temp_sensor = ds18x20.DS18X20(temp_wire)
 roms = temp_sensor.scan()
 
+# 네오픽셀 핀 초기화
+np0 = NeoPixel(Pin(21), 1)
+
+# 네오픽셀 상태를 추척하는 변수 초기화
+def np_red():
+    for i in range(0, np0.n):
+        np0[i] = (255,0,0)
+    np0.write()
+def np_green():
+    for i in range(0, np0.n):
+        np0[i] = (0,255,0)
+    np0.write()
+def np_off():
+    for i in range(0, np0.n):
+        np0[i] = (0,0,0)
+    np0.write()
+
 # 버튼 핸들러 함수
-def Rbutton_handler(pin):
+def button_handler(pin):
     global sensing_active, recording_active, file, button_pressed_time
 
     current_time = utime.ticks_ms()
@@ -67,21 +84,23 @@ def play_buzzer(freq):
 
 # 버튼에 핸들러 등록
 #Rbutton.irq(trigger=Pin.IRQ_FALLING, handler=Rbutton_handler)
-Rbutton.irq(trigger=Pin.IRQ_FALLING | Pin.IRQ_RISING, handler=Rbutton_handler)
+button.irq(trigger=Pin.IRQ_FALLING | Pin.IRQ_RISING, handler=button_handler)
 
 # 메인 루프
 while True:
     if sensing_active:
-        YLed.value(1)  # YLed 켜기
+        Led.value(1)  # Led 켜기
+        #np_green()
         for rom in roms:
             temp_sensor.convert_temp()
             utime.sleep_ms(100)
             t = temp_sensor.read_temp(rom)
             print(t)
-            YLed.value(0)  # YLed 끄기
+            Led.value(0)  # Led 끄기
             utime.sleep_ms(500)
     if recording_active:
-        Rled.value(1)  # Rled 켜기
+        Led.value(1)  # Rled 켜기
+        #np_red()
         # 데이터 기록 로직
         for rom in roms:
             temp_sensor.convert_temp()
@@ -104,5 +123,6 @@ while True:
                     print("reopen file")
             utime.sleep(recording_interval)  # 사용자가 설정한 기록 간격에 따라 대기
     else:
-        Rled.value(0)  # Rled 끄기
+        Led.value(0)  # Rled 끄기
+        #np_off()
     utime.sleep(0.1)
