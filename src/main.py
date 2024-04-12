@@ -9,7 +9,8 @@ import sdcard
 # 글로벌 변수
 sensing_active = False
 recording_active = False
-recording_interval = 1  # 데이터 기록 간격을 초 단위로 설정 (예: 1초마다 데이터 기록)
+#recording_interval = 1  # 데이터 기록 간격을 초 단위로 설정 (예: 1초마다 데이터 기록)
+recording_interval = 30  # 데이터 기록 간격을 초 단위로 설정 (예: 1초마다 데이터 기록)
 file = None # 파일 객체 초기화
 button_pressed_time = 0 # 버튼 눌린 시간 기록
 
@@ -85,7 +86,7 @@ def button_handler(pin):
             if recording_active:
                 play_buzzer(2000)  # recording_active 시작 시 부저
                 #file = open('temperature_data.csv', 'a')  # 파일 열기
-                file = open("/sd/test01.csv", "w") 
+                file = open("/sd/temp_data.csv", "w") 
                 # 파일에 새 데이터 세트가 추가될 때마다 구분자 삽입
                 file.write("\n--- New Data ---\n")
                 if file.tell() == len("---New Data ---\n"): #파일이 새로 생성되었다면 
@@ -143,7 +144,8 @@ while True:
                 if write_count >= write_threshold:
                     # 파일을 닫고 다시 열기
                     file.close()
-                    file = open('test01.csv','a')
+                    #file = open('test01.csv','a')
+                    file = open("/sd/temp_data.csv", "a") 
                     #file = open('temperature_data.csv','a')
                     write_count = 0 # 쓰기 카운터를 다시 원상태로
                     print("reopen file")
