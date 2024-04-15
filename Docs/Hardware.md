@@ -38,6 +38,13 @@
 |-----------|------|
 |   GP20    | SW1 |
 
+## ADC
+| RaspberryPi Pico W | TacktileSwitch |
+|-----------|------|
+|   GP27    | BAT_DIV |
+
+
+
 # [하드웨어 검증 코드](/src/simpletest/) 
 - [Blink.py](/src/simpletest/Blink.py)
 - [Button.py](/src/simpletest/Button.py)
