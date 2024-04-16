@@ -37,4 +37,4 @@ while True:
     sleep(0.5)
     led.value(0)
     sleep(0.5)
-    #sleep(1800) # 30 minutes
+    sleep(1800) # 30 minutes
