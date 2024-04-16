@@ -165,7 +165,7 @@ while True:
     #        utime.sleep_ms(500)
     if recording_active:
         print("recording active")
-        Led.value(0)  # 녹화 상태에서는 꺼짐 
+        Led.value(0)  # 녹화 상태에서는 켜짐 
         #Led.value(1)  # Rled 켜기
         # 데이터 기록 로직
         for rom in roms:
@@ -189,7 +189,9 @@ while True:
             #        #file = open('temperature_data.csv','a')
             #        write_count = 0 # 쓰기 카운터를 다시 원상태로
             #        print("reopen file")
+            Led.value(1)
             utime.sleep(recording_interval)  # 사용자가 설정한 기록 간격에 따라 대기
+            Led.value(0)
     else:
         #print("recording inactive")
         Led.value(1)  # 현재 켜져있는 상태 알림
