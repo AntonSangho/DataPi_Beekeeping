@@ -7,7 +7,7 @@
 """
 
 import utime
-from machine import Pin, I2C, PWM
+from machine import Pin, I2C, PWM, ADC
 from ds3231_port import DS3231
 import onewire, ds18x20
 from neopixel import NeoPixel
@@ -17,8 +17,8 @@ import sdcard
 # 글로벌 변수
 sensing_active = False
 recording_active = False
-recording_interval = 1  # 데이터 기록 간격을 초 단위로 설정 (예: 1초마다 데이터 기록)
-#recording_interval = 1800  # 데이터 기록 간격을 초 단위로 설정 (예: 30분마다 데이터 기록)
+#recording_interval = 1  # 데이터 기록 간격을 초 단위로 설정 (예: 1초마다 데이터 기록)
+recording_interval = 1800  # 데이터 기록 간격을 초 단위로 설정 (예: 30분마다 데이터 기록)
 file = None # 파일 객체 초기화
 #button_pressed_time = 0 # 버튼 눌린 시간 기록
 
@@ -80,6 +80,10 @@ sd = sdcard.SDCard(spi, cs)
 vfs = uos.VfsFat(sd)
 uos.mount(vfs, "/sd")
 
+# 베터리 전압을 읽는 변수 초기화
+batt_adc = machine.ADC(27)
+VOLTAGE_DROP_FACTOR = 1
+
 
 # 버튼 핸들러 함수
 def button_handler(pin):
@@ -87,54 +91,13 @@ def button_handler(pin):
     global sensing_active, recording_active, file 
     current_time = utime.ticks_ms() 
     if pin.value() == 0:  # 버튼이 눌렸을 때
-        print("button pressed")
+        print("recording active")
         np_red()
         play_buzzer(2000)
         utime.sleep(1)
         np_off()
-        #print(current_time - button_pressed_time)
-        #if current_time - button_pressed_time > 1000:  # 버튼이 1초 이상 눌렸을 경우
-        #    print("long pressed")
-        #    recording_active = not recording_active
-        #    #play_buzzer(2000)  # recording_active 시작 시 부저
-        #else:
-        #    print("short button pressed")
         recording_active = not recording_active
-    #else:
-        #print("button released")
-        #play_buzzer(2000)  # button이 떼어졌을 때 부저
-
     
-    #if pin.value() == 0:  # 버튼이 눌렸을 때
-    #    print("button pressed")
-    #    button_pressed_time = current_time
-    #else:  # 버튼이 떼어졌을 때
-    #    print("recording inactive")
-    #    #if current_time - button_pressed_time > 1000:  # 버튼이 1초 이상 눌렸을 경우
-    #    if current_time - button_pressed_time > 2000:  # 버튼이 1초 이상 눌렸을 경우
-    #        print("long pressed")
-    #        recording_active = not recording_active
-    #        if recording_active:
-    #            print("recording active")
-    #            play_buzzer(2000)  # recording_active 시작 시 부저
-    #            ##file = open('temperature_data.csv', 'a')  # 파일 열기
-    #            #file = open("/sd/temp_data.csv", "w") 
-    #            ## 파일에 새 데이터 세트가 추가될 때마다 구분자 삽입
-    #            #file.write("\n--- New Data ---\n")
-    #            #if file.tell() == len("---New Data ---\n"): #파일이 새로 생성되었다면 
-    #            #    file.write('Time,Temperature\n')
-    #        else:
-    #            print("recording inactive")
-    #            #if file:
-    #            #    file.close()  # 파일 닫기
-    #            #    file = None
-    #            #    play_buzzer(2000)   # recording_active 종료 시 부저
-    #    else:  # 버튼이 1초 미만으로 눌렸을 경우
-    #        print("short button pressed")
-    #        sensing_active = not sensing_active
-    #        play_buzzer(1000)  # sensing_active 시작 시 부저
-
-
 # 부저를 울리는 함수
 def play_buzzer(freq):
     buzzer.duty_u16(30000)
@@ -146,60 +109,26 @@ def play_buzzer(freq):
 #Rbutton.irq(trigger=Pin.IRQ_FALLING, handler=Rbutton_handler)
 button.irq(trigger=Pin.IRQ_FALLING | Pin.IRQ_RISING, handler=button_handler)
 
-# 메인 루프
 while True:
-    #if sensing_active:
-    #    print("sensing active")
-    #    Led.value(1)  # Led 켜기
-    #    #np_green()
-    #    for rom in roms:
-    #        temp_sensor.convert_temp()
-    #        utime.sleep_ms(100)
-    #        t = temp_sensor.read_temp(rom)
-    #        print(t)
-    #        Led.value(0)  # Led 끄기
-    #        utime.sleep_ms(500)
     if recording_active:
-        file = open('01.csv', 'w')  # 파일 열기
-        #file = open("/sd/temp_data.csv", "w") 
-        ## 파일에 새 데이터 세트가 추가될 때마다 구분자 삽입
-        file.write("\n--- New Data ---\n")
-        if file.tell() == len("---New Data ---\n"): #파일이 새로 생성되었다면 
-             file.write('Time,Temperature\n')
-        print("New data")
-        Led.value(0)  # 녹화 상태에서는 켜짐 
-        #Led.value(1)  # Rled 켜기
-        # 데이터 기록 로직
-        for rom in roms:
-            temp_sensor.convert_temp()
-            utime.sleep_ms(100)
-            t = temp_sensor.read_temp(rom)
-            dateTime = ds3231.get_time()
-            timestamp = "{:04d}-{:02d}-{:02d} {:02d}:{:02d}:{:02d}".format(dateTime[0], dateTime[1], dateTime[2], dateTime[3], dateTime[4], dateTime[5])
-            data_line = "{}, {:6.2f}\n".format(timestamp, t)
-            print(t)
-            if file:
-                file.write(data_line)
-                #write_count += 1 # 쓰기 횟수 하나 증가
-                
-                # 만약 쓰기 횟수가 도달 했을 시에
-                #if write_count >= write_threshold:
-                #    # 파일을 닫고 다시 열기
-                #    file.close()
-                #    #file = open('test01.csv','a')
-                #    file = open("/sd/temp_data.csv", "a") 
-                #    #file = open('temperature_data.csv','a')
-                #    write_count = 0 # 쓰기 카운터를 다시 원상태로
-                #    print("reopen file")
-            Led.value(1)
-            utime.sleep(recording_interval)  # 사용자가 설정한 기록 간격에 따라 대기
-            Led.value(0)
+        with open('/sd/01.csv', 'a') as file:
+        #with open('01.csv', 'a') as file:
+            #if file.tell() == 0:
+            # 베터리 전압을 읽어서 data_line에 저장
+            batt_adc_value = batt_adc.read_u16()
+            batt_voltage = batt_adc_value * 3.3 / 65535 * VOLTAGE_DROP_FACTOR
+            for rom in roms:
+                temp_sensor.convert_temp()
+                utime.sleep_ms(100)
+                t = temp_sensor.read_temp(rom)
+                dateTime = ds3231.get_time()
+                timestamp = "{:04d}-{:02d}-{:02d} {:02d}:{:02d}:{:02d}".format(dateTime[0], dateTime[1], dateTime[2], dateTime[3], dateTime[4], dateTime[5])
+                data_line = "{}, {:6.2f}, {:6.2f}\n".format(timestamp, t, batt_voltage)
+                #print(t)
+                if file:
+                    file.write(data_line)
+                    Led.value(1)
+                    utime.sleep(recording_interval)  # 사용자가 설정한 기록 간격에 따라 대기
+                    Led.value(0)
     else:
-        if file:
-            file.close() # 파일 닫기
-        #print("recording inactive")
         Led.value(1)  # 현재 켜져있는 상태 알림
-        #Led.value(0)  # Rled 끄기
-        np_off()
-        #play_buzzer(1000)
-    utime.sleep(0.1)

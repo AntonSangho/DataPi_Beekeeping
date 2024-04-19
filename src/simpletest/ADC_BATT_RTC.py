@@ -27,7 +27,7 @@ def writeLine(text):
  
 while True:
     reading = analogue_value.read_u16()     
-    voltage = reading * (3.3 / 65535) * VOLTAGE_DROP_FACTOR
+    voltage = reading * (4.5 / 65535) * VOLTAGE_DROP_FACTOR
     dateTime = ds3231.get_time()
     #print("hour:min:sec")
     #print(dateTime[3],dateTime[4],dateTime[5])
@@ -37,4 +37,4 @@ while True:
     sleep(0.5)
     led.value(0)
     sleep(0.5)
-    sleep(1800) # 30 minutes
+    #sleep(1800) # 30 minutes

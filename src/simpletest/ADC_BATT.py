@@ -6,6 +6,6 @@ VOLTAGE_DROP_FACTOR = 1
  
 while True:
     reading = analogue_value.read_u16()     
-    voltage = reading * (3.3 / 65535) * VOLTAGE_DROP_FACTOR
+    voltage = reading * (4.5 / 65535) * VOLTAGE_DROP_FACTOR
     print(voltage)
     sleep(2)
