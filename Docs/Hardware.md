@@ -45,16 +45,7 @@
 
 
 
-# [하드웨어 검증 코드](/src/simpletest/) 
-- [Blink.py](/src/simpletest/Blink.py)
-- [Button.py](/src/simpletest/Button.py)
-- [Buzzer.py](/src/simpletest/Buzzer.py)
-- [i2C.py](/src/simpletest/i2c.py)
-- [Light.py](/src/simpletest/Light.py)
-- [Neopixel.py](/src/simpletest/Neopixel.py)
-- [RTC.py](/src/simpletest/RTC.py)
-- [sd_test.py](/src/simpletest/sd_test.py)
-- [Temp.py](/src/simpletest/Temp.py)
+
 
 
 
