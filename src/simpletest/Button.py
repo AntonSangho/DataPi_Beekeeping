@@ -1,3 +1,17 @@
+"""
+버튼을 누르면 LED가 꺼지고, 버튼을 누르지 않으면 LED가 켜지는 의사코드 
+
+1. LED 핀 설정
+2. 버튼 핀 설정
+3. 무한 루프
+    4. 버튼의 상태 확인
+    5. 버튼이 눌렸을 때
+        6. LED 끄기
+    7. 버튼이 눌리지 않았을 때
+        8. LED 켜기
+    9. 0.1초 대기
+"""
+
 from machine import Pin
 from utime import sleep
 import utime 

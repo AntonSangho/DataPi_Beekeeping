@@ -1,5 +1,5 @@
 import network
-from simpletest.mywifi import networksetting
+#from simpletest.mywifi import networksetting
 from machine import RTC
 from machine import Pin 
 from machine import I2C
