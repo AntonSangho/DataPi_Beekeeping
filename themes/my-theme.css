@@ -1,0 +1,57 @@
+/* @theme my-theme */
+@import 'default';
+
+@font-face {
+    font-family: 'NotoSansKR';
+    src: url('/themes/fonts/NotoSansKR-Regular.ttf');
+}
+
+section {
+    width: 1280px;
+    height: 960px;
+    font-size: 40px;
+    padding: 40px;
+    font-family: 'NotoSansKR', sans-serif !important;
+    background-color: black;
+    color: white;
+}
+
+header, footer {
+    place-content: center;
+    position: fixed;
+    left: 50px;
+    right: 50px;
+    height: 20px;
+}
+header {
+    top: 50px;
+}
+
+body {
+    background-color: white;
+    color: white;
+    font-family: 'NotoSansKR', sans-serif !important; 
+}
+  
+/* 주제 */  
+h1 {
+    font-size: 100px;
+    color: rgb(255, 255, 255);
+}
+/* 이론 */  
+h2 {
+    font-size: 50px;
+    color: rgba(255, 255, 255, 0.5);
+}
+/* 실습 */  
+h3 {
+    font-size: 50px;
+    color: cyan;
+}
+ /* Styling page number */
+section::after {
+    color: rgb(255, 255, 255);
+  font-weight: bold;
+  text-shadow: 1px 1px 0 #ffffff;
+}
+ 
