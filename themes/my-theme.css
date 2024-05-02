@@ -3,7 +3,8 @@
 
 @font-face {
     font-family: 'NotoSansKR';
-    src: url('/themes/fonts/NotoSansKR-Regular.ttf');
+    src: url('/themes/fonts/NotoSansKR-Regular.ttf'); 
+
 }
 
 section {

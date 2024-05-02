@@ -110,7 +110,8 @@ plt.close(fig)
 
 ---
 
-### 1. 기본코드 실행하기
+### 그래프 그리기 
+
 ```python
 import matplotlib.pyplot as plt
 
@@ -122,52 +123,90 @@ ax.plot(temp)
 
 plt.show() 
 ```
-코드설명 
-```text
+<!--
 fix는 그래프 컬렉션, ax는 그림에 포함될 그래프를 의미합니다.
 Matplot 뷰어를 열고 그래프를 표시합니다.
-```
+-->
+
+![bg right:50% w:600](../6_Matplotlib/img/tutorial_1.png)
 
 ---
-### 실행결과 
-![width:800px](../10_Matplotlib/img/tutorial_1.png)
+### x축에 데이터 추가하기
 
----
-
-### 시도해보기
-- 축에 라벨을 달기 
-- X축의 값을 날짜로 변경해보기
-- 날짜는 정수가 아닌 실수로 표시하기 
-- 그래프 디자인을 변경해보기 
-
----
-
-### 2. 그래프에 넣는 정보를 변경하기
 ```python
 import matplotlib.pyplot as plt
 
 temp = [20, 25, 27, 29, 25]
 date = [11, 12, 13, 14, 15]
 
-#plt.style.use('seaborn-v0_8-dark')
-plt.style.use('bmh')
 fig, ax = plt.subplots()
-ax.plot(date, temp, linewidth=3) # 선의 두께를 지정
+ax.plot(date, temp)
 
-# 그래프 타이틀을 지정하고 축에 이름표를 붙입니다.
-ax.set_title("Temperature of the Date", fontsize=24)
+plt.show()
+```
+
+![bg right:50% w:600](../6_Matplotlib/img/tutorial_2.png)
+
+---
+### Label 넣기 
+```python
+import matplotlib.pyplot as plt
+
+temp = [20, 25, 27, 29, 25]
+date = [11, 12, 13, 14, 15]
+
+fig, ax = plt.subplots()
+ax.plot(date, temp)
 ax.set_xlabel("Date", fontsize=14)
 ax.set_ylabel("Temperature", fontsize=14)
 
-# 두 축으 눈금크기를 지정합니다.
-ax.tick_params(labelsize=14)
+
+plt.show()
+```
+
+![bg right:50% w:600](../6_Matplotlib/img/tutorial_3.png)
+
+---
+### 눈금표시하기 
+
+```python
+import matplotlib.pyplot as plt
+
+temp = [20, 25, 27, 29, 25]
+date = [11, 12, 13, 14, 15]
+
+fig, ax = plt.subplots()
+ax.plot(date, temp)
+ax.set_xlabel("Date", fontsize=14)
+ax.set_ylabel("Temperature", fontsize=14)
 plt.xticks([int(d) for d in date])
 
 plt.show()
-``` 
+```
+
+![bg right:50% w:600](../6_Matplotlib/img/tutorial_4.png)
+
 ---
-### 실행결과
-![width:800px](../6_Matplotlib/img/tutorial_2.png)
+### 그래프 스타일 적용하기
+```python
+import matplotlib.pyplot as plt
+
+temp = [20, 25, 27, 29, 25]
+date = [11, 12, 13, 14, 15]
+
+plt.style.use('bmh')
+fig, ax = plt.subplots()
+ax.plot(date, temp)
+ax.set_xlabel("Date", fontsize=14)
+ax.set_ylabel("Temperature", fontsize=14)
+plt.xticks([int(d) for d in date])
+
+plt.show()
+```
+
+![bg right:50% w:600](../6_Matplotlib/img/tutorial_5.png)
+
+<!-- 런타임을 종료해야 다음 셀에 적용할 떄 스타일이 적용되는 이슈가 있습니다. -->
 
 ---
 ### 실습지  
@@ -175,118 +214,112 @@ plt.show()
 
 ---
 
-### 3. 데이터를 점으로 표현하기 
+### 점으로 표현하기 
 ```python
 import matplotlib.pyplot as plt
 
-plt.style.use('seaborn-v0_8')
 fig, ax = plt.subplots()
 
-ax.scatter(2, 4) #점으로 표현하기 위해서 사용
+ax.scatter(2, 4) 
 
 plt.show()
 ```
----
-### 실행결과
-![width:800px](../6_Matplotlib/img/tutorial_3.png)
 
---- 
-### 4. 여러게의 점으로 표현하기
+![bg right:50% w:600](../6_Matplotlib/img/tutorial_6.png)
+
+---
+### x축 좌표
 ```python 
 import matplotlib.pyplot as plt
 
 temp = [20, 25, 27, 29, 25]
 date = [11, 12, 13, 14, 15]
 
-plt.style.use('seaborn-v0_8-dark')
 fig, ax = plt.subplots()
-ax.scatter(date, temp, s=100)
+ax.scatter(date, temp)
 
-# 그래프 타이틀을 지정하고 축에 이름표를 붙입니다.
-ax.set_title("Temperature of the Date", fontsize=24)
 ax.set_xlabel("Date", fontsize=14)
 ax.set_ylabel("Temperature", fontsize=14)
-
-# 두 축으 눈금크기를 지정합니다.
-ax.tick_params(labelsize=14)
 
 plt.show()
 
 ```
+
+![bg right:50% w:600](../6_Matplotlib/img/tutorial_7.png)
+
+
 ---
 
-### 실행결과
-![width:800px](../6_Matplotlib/img/tutorial_4.png)
-
----
-
-### 5. 축의 범위를 정하기
-```python
+### 범위정하기 
+```python 
 import matplotlib.pyplot as plt
 
 temp = [20, 25, 27, 29, 25]
 date = [11, 12, 13, 14, 15]
 
-plt.style.use('seaborn-v0_8-dark')
 fig, ax = plt.subplots()
-ax.scatter(date, temp, s=100)
+ax.scatter(date, temp)
 
-# 그래프 타이틀을 지정하고 축에 이름표를 붙입니다.
-ax.set_title("Temperature of the Date", fontsize=24)
 ax.set_xlabel("Date", fontsize=14)
 ax.set_ylabel("Temperature", fontsize=14)
 
-# 두 축으 눈금크기를 지정합니다.
-ax.tick_params(labelsize=14)
-
-# x축의 범위를 날짜로 하고 y축의 범위를 온도로 지정했습니다.  
 ax.axis([1, 30, 13, 40])
-
 plt.show()
 
 ```
----
 
-### 실행결과
-![width:800px](../6_Matplotlib/img/tutorial_5.png)
+![bg right:50% w:600](../6_Matplotlib/img/tutorial_8.png)
 
----
-### 6. 그래프 저장하기 
-```python
+--- 
+### 스타일 적용하기 
+```python 
 import matplotlib.pyplot as plt
 
 temp = [20, 25, 27, 29, 25]
 date = [11, 12, 13, 14, 15]
 
-plt.style.use('seaborn-v0_8-dark')
+plt.style.use('seaborn-v0_8-dark-palette')
 fig, ax = plt.subplots()
 ax.scatter(date, temp, s=100)
 
-# 그래프 타이틀을 지정하고 축에 이름표를 붙입니다.
 ax.set_title("Temperature of the Date", fontsize=24)
 ax.set_xlabel("Date", fontsize=14)
 ax.set_ylabel("Temperature", fontsize=14)
 
-# 두 축으 눈금크기를 지정합니다.
 ax.tick_params(labelsize=14)
 
-# x축의 범위를 날짜로 하고 y축의 범위를 온도로 지정했습니다.  
+plt.show()
+
+```
+![bg right:50% w:600](../6_Matplotlib/img/tutorial_9.png)
+
+---
+### 그래프 저장하기 
+
+```python
+import matplotlib.pyplot as plt
+from google.colab import files
+
+temp = [20, 25, 27, 29, 25]
+date = [11, 12, 13, 14, 15]
+
+plt.style.use('seaborn-v0_8-dark-palette')
+fig, ax = plt.subplots()
+ax.scatter(date, temp, s=100)
+
+ax.set_xlabel("Date", fontsize=14)
+ax.set_ylabel("Temperature", fontsize=14)
 ax.axis([1, 30, 13, 40])
 
-#plt.savefig('savefig_200dpi_1.png', dpi=300)
-plt.savefig(
-    'chart.png', dpi=300, facecolor='white', edgecolor='black',
-    orientation='portrait', format='png', transparent=False,
-    bbox_inches='tight', pad_inches=0.1)
+ax.tick_params(labelsize=14)
+
+plt.savefig('chart.png', format='png', dpi=300)
+#plt.show()
+files.download('chart.png')
 plt.close()
 ```
----
-
-### 실행결과
-![width:800px](../6_Matplotlib/img/tutorial_6.png)
 
 ---
-
 
 # 정리
 - 데이터로 그래프 만들기
