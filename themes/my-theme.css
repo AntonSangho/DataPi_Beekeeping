@@ -3,7 +3,7 @@
 
 @font-face {
     font-family: 'NotoSansKR';
-    src: url('/themes/fonts/NotoSansKR-Regular.ttf'); 
+    src: url('/themes/fonts/NotoSansKR-Bold.ttf'); 
 
 }
 
@@ -17,15 +17,22 @@ section {
     color: white;
 }
 
-header, footer {
+footer {
+    font-size: 40px;
     place-content: center;
     position: fixed;
     left: 50px;
     right: 50px;
     height: 20px;
+
 }
 header {
+    font-size: 40px;
+    place-content: center;
+    position:fixed;
     top: 50px;
+    color: aquamarine;
+    font-family: 'NotoSansKR', sans-serif !important; 
 }
 
 body {

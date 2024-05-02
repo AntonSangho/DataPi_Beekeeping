@@ -3,8 +3,18 @@
 marp: true
 theme: my-theme
 paginate: true
-header: 포르쉐 빌리브인드림 BEE Quiz 
-footer: 공학도서관 
+#header: 포르쉐 빌리브인드림 BEE Quiz 
+#footer: 공학도서관 
+style: |
+  .columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .code {
+    font-family:"Cascadia Code"
+  }
+
 
 ---
 
@@ -109,8 +119,9 @@ plt.close(fig)
 # Matplot 튜토리얼 
 
 ---
-
-### 그래프 그리기 
+<section>
+<header>그래프 그리기 </header> 
+</section>
 
 ```python
 import matplotlib.pyplot as plt
@@ -128,10 +139,9 @@ fix는 그래프 컬렉션, ax는 그림에 포함될 그래프를 의미합니�
 Matplot 뷰어를 열고 그래프를 표시합니다.
 -->
 
-![bg right:50% w:600](../6_Matplotlib/img/tutorial_1.png)
+![bg right:50% w:500](../6_Matplotlib/img/tutorial_1.png)
 
 ---
-### x축에 데이터 추가하기
 
 ```python
 import matplotlib.pyplot as plt
@@ -146,6 +156,7 @@ plt.show()
 ```
 
 ![bg right:50% w:600](../6_Matplotlib/img/tutorial_2.png)
+
 
 ---
 ### Label 넣기 
