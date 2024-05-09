@@ -8,8 +8,8 @@
 }
 
 section {
-    width: 1280px;
-    height: 960px;
+    /*width: 1280px;*/
+    /*height: 960px;*/
     font-size: 40px;
     padding: 40px;
     font-family: 'NotoSansKR', sans-serif !important;
@@ -31,7 +31,7 @@ header {
     place-content: center;
     position:fixed;
     top: 50px;
-    color: aquamarine;
+    color:antiquewhite;
     font-family: 'NotoSansKR', sans-serif !important; 
 }
 
@@ -62,4 +62,7 @@ section::after {
   font-weight: bold;
   text-shadow: 1px 1px 0 #ffffff;
 }
- 
+/* 코드블럭 폰트 */
+code {
+    font-family:"Cascadia Code"
+}
