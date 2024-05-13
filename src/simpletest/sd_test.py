@@ -21,16 +21,13 @@ sd = sdcard.SDCard(spi, cs)
 
 # Mount filesystem
 vfs = uos.VfsFat(sd)
-uos.mount(vfs, "/sdcard")
-#uos.mount(vfs, "/3037-3339")
+uos.mount(vfs, "/SDCARD")
 # Create a file and write something to it
-with open("/sdcard/test01.txt", "w") as file:
-#with open("/3037-3339/test01.txt", "w") as file:
+with open("/SDCARD/test01.txt", "w") as file:
     file.write("Hello, SD World!\r\n")
     file.write("This is a test\r\n")
 
 # Open the file we just created and read from it
-with open("/sdcard/test01.txt", "r") as file:
-#with open("/3037-3339/test01.txt", "r") as file:
+with open("/SDCARD/test01.txt", "r") as file:
     data = file.read()
     print(data)
