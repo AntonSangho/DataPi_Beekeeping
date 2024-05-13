@@ -18,12 +18,15 @@ import onewire, ds18x20
 from neopixel import NeoPixel
 import uos 
 import sdcard
+import os 
+
+
 
 # 글로벌 변수
 sensing_active = False
 recording_active = False
 #recording_interval = 1  # 데이터 기록 간격을 초 단위로 설정 (예: 1초마다 데이터 기록)
-recording_interval = 20  # 데이터 기록 간격을 초 단위로 설정 (예: 30분마다 데이터 기록)
+recording_interval = 1800  # 데이터 기록 간격을 초 단위로 설정 (예: 30분마다 데이터 기록)
 file = None # 파일 객체 초기화
 #button_pressed_time = 0 # 버튼 눌린 시간 기록
 
@@ -93,6 +96,16 @@ spi = machine.SPI(0,
 # sdcard 초기화
 sd = sdcard.SDCard(spi, cs)
 
+## Check if the SD card is inserted
+#try:
+#    os.mount(sd, '/SDCARD')
+#    if not '/SDCARD' in os.listdir('/'):
+#        print("SD card not inserted")
+#        np_red()  # Red: SD card error
+#except OSError:
+#    print("SD card not inserted")
+#    np_red()
+
 # sdcard 마운트
 vfs = uos.VfsFat(sd)
 #uos.mount(vfs, "/sd")
@@ -154,32 +167,39 @@ print("Ready")
 
 
 while True:
-    if recording_active:
-        print("recording active")
-        with open('/SDCARD/01.csv', 'a') as file:
-        #with open('01.csv', 'a') as file:
-            #if file.tell() == 0:
-            # 베터리 전압을 읽어서 data_line에 저장
-            batt_adc_value = batt_adc.read_u16()
-            batt_voltage = batt_adc_value * 3.3 / 65535 * VOLTAGE_DROP_FACTOR
-            for rom in roms:
-                temp_sensor.convert_temp()
-                utime.sleep_ms(100)
-                t = temp_sensor.read_temp(rom)
-                dateTime = ds3231.get_time()
-                timestamp = "{:04d}-{:02d}-{:02d} {:02d}:{:02d}:{:02d}".format(dateTime[0], dateTime[1], dateTime[2], dateTime[3], dateTime[4], dateTime[5])
-                data_line = "{}, {:6.2f}, {:6.2f}\n".format(timestamp, t, batt_voltage)
-                #print(t)
-                if file:
-                    file.write(data_line)
-                    for _ in range(recording_interval):
-                        if not recording_active:
-                            break
-                        Led.value(1)
-                        #utime.sleep(recording_interval)  # 사용자가 설정한 기록 간격에 따라 대기
-                        utime.sleep(0.5)
-                        Led.value(0)
-                        utime.sleep(0.5)
+    try:
+        if recording_active:
+            print("recording active")
+            with open('/SDCARD/01.csv', 'a') as file:
+            #with open('01.csv', 'a') as file:
+                #if file.tell() == 0:
+                # 베터리 전압을 읽어서 data_line에 저장
+                batt_adc_value = batt_adc.read_u16()
+                batt_voltage = batt_adc_value * 3.3 / 65535 * VOLTAGE_DROP_FACTOR
+                for rom in roms:
+                    temp_sensor.convert_temp()
+                    utime.sleep_ms(100)
+                    t = temp_sensor.read_temp(rom)
+                    dateTime = ds3231.get_time()
+                    timestamp = "{:04d}-{:02d}-{:02d} {:02d}:{:02d}:{:02d}".format(dateTime[0], dateTime[1], dateTime[2], dateTime[3], dateTime[4], dateTime[5])
+                    data_line = "{}, {:6.2f}, {:6.2f}\n".format(timestamp, t, batt_voltage)
+                    #print(t)
+                    if file:
+                        file.write(data_line)
+                        for _ in range(recording_interval):
+                            if not recording_active:
+                                break
+                            Led.value(1)
+                            #utime.sleep(recording_interval)  # 사용자가 설정한 기록 간격에 따라 대기
+                            utime.sleep(0.5)
+                            Led.value(0)
+                            utime.sleep(0.5)
+    except OSError as e:
+        print("File operation failed: ", e)
+        np_red()
+    except Exception as e:
+        print("An error occurred: ", e)
+        np_red() 
     else:
         print("recording inactive")
         np_green() # 녹색: 기록할 준비 완료
