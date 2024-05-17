@@ -9,7 +9,7 @@ import sdcard
 # 글로벌 변수
 sensing_active = False
 recording_active = False
-recording_interval = 1  # 데이터 기록 간격을 초 단위로 설정 (예: 30분마다 데이터 기록)
+recording_interval = 1800  # 데이터 기록 간격을 초 단위로 설정 (예: 30분마다 데이터 기록)
 file = None # 파일 객체 초기화
 
 # LED, 버튼, 부저 설정
@@ -91,7 +91,7 @@ def button_handler(pin):
             button_buzzer(2000)
             utime.sleep(0.1)
             np_off()
-            file = open('/SDCARD/01.csv', 'a') #실제로는 sd카드에 01.csv 파일로 저장
+            file = open('/SDCARD/data.csv', 'a') #실제로는 sd카드에 01.csv 파일로 저장
             #file = open('01.csv', 'a') #테스트용으로 피코에 01.csv 파일로 저장
         else:
             print("recording stop")
