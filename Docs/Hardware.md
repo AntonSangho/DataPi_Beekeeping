@@ -44,6 +44,15 @@
 |   GP27    | BAT_DIV |
 
 
+# [SDCARD 포멧하기](https://linuxize.com/post/how-to-format-usb-sd-card-linux/)
+1. [sdcard_script.sh 파일 경로로 이동](/src/simpletest/)  
+2. ``` sudo chmod +x sdcard_script.pyq```
+3. ```sudo ./sdcard_script.py```
+
+
+
+
+
 
 
 
