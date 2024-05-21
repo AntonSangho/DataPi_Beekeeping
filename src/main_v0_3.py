@@ -89,7 +89,7 @@ def button_handler(pin):
             Led.value(1)
             np_blue()
             button_buzzer(2000)
-            utime.sleep(0.1)
+            utime.sleep(1) # 색상을 확인하는 시간
             np_off()
             file = open('/SDCARD/data.csv', 'a') #실제로는 sd카드에 01.csv 파일로 저장
             #file = open('01.csv', 'a') #테스트용으로 피코에 01.csv 파일로 저장
@@ -97,7 +97,7 @@ def button_handler(pin):
             print("recording stop")
             np_yellow()
             button_buzzer(2000)
-            utime.sleep(0.1)
+            utime.sleep(1) # 색상을 확인하는 시간
             np_off()
             if file:
                 Led.value(0)
