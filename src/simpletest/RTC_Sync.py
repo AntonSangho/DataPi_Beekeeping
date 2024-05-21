@@ -8,7 +8,7 @@ import utime as time
 import usocket as socket
 import ustruct as struct
 from ds3231_port import DS3231
-
+from time import sleep
 
 ssid, password = networksetting()
 
@@ -47,7 +47,8 @@ wlan = network.WLAN(network.STA_IF)
 wlan.active(True)
 wlan.connect(ssid, password)
     
-max_wait = 10
+#max_wait = 10
+max_wait = 100
 print('Waiting for connection')
 while max_wait > 10:
     if wlan.status() < 0 or wlan.status() >= 3:
