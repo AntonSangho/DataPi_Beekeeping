@@ -30,15 +30,41 @@ oled = ssd1306.SSD1306_I2C(oled_width, oled_height, i2c)
 
 def display_on_oled(text):
     oled.fill(0)
-    max_line_length = 20 # 21 characters per line
+    max_chars_per_line = 21 # 한 줄에 들어갈 최대 글자 수
+    max_lines = 4 # 화면에 표시할 최대 줄 수
+    lines_height = 12 # 한 줄의 높이
+
     lines = []
+    current_line = ""
+
+    words = text.split(" ")
+    for word in words:
+        if len(current_line) + len(word) + 1 <= max_chars_per_line:
+            if current_line:
+                current_line += " "
+            current_line += word
+        else:
+            lines.append(current_line)
+            current_line = word
+
+    if current_line:
+        lines.append(current_line)
+
+    lines = lines[:max_lines]
+
+    #y = 0
+    #for line in lines:
+    #    oled.text(line, 0, y)
+    #    y += lines_height
+    #oled.show()
+
     
-    # 줄을 나누기 위해 텍스트를 max_line_length로 나눕니다.
-    while len(text) > max_line_length:
-        line = text[:max_line_length]
-        lines.append(line)
-        text = text[max_line_length:]
-    lines.append(text) # 마지막 줄 추가 
+    ## 줄을 나누기 위해 텍스트를 max_line_length로 나눕니다.
+    #while len(text) > max_line_length:
+    #    line = text[:max_line_length]
+    #    lines.append(line)
+    #    text = text[max_line_length:]
+    #lines.append(text) # 마지막 줄 추가 
 
     y = 0
     for line in lines:
